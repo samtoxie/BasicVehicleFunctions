@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BasicVehicleFunctions
 {
-    public class Class1
+    class Common
     {
     }
 }
