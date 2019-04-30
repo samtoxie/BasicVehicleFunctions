@@ -24,6 +24,8 @@ namespace MenuExample
         private static UIMenuItem togglerf;
         private static UIMenuItem togglefd;
         private static UIMenuItem togglefp;
+        private static UIMenuItem toggleEngine;
+
 
         public static UIMenuItem StartCalloutItem;
 
@@ -61,9 +63,12 @@ namespace MenuExample
             togglerf = new UIMenuItem("Rear Passenger");
             togglefd = new UIMenuItem("Front Driver");
             togglefp = new UIMenuItem("Front Passenger");
+            toggleEngine = new UIMenuItem("Toggle Engine");
+
 
 
             mainMenu.AddItem(StartCalloutItem = new UIMenuItem("Open/Close Doors", " Open and close specific doors"));
+            mainMenu.AddItem(toggleEngine);
             mainMenu.BindMenuToItem(DoorMainMenu, StartCalloutItem);
 
             DoorMainMenu.AddItem(togglefd);
@@ -100,8 +105,29 @@ namespace MenuExample
         public static void OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
             if (sender != mainMenu) return; // We only want to detect changes from our menu.
-            // You can also detect the button by using index
-            
+                                            // You can also detect the button by using index
+            else if (selectedItem == toggleEngine)
+            {
+                GameFiber.StartNew(delegate // Start a new fiber if the code sleeps or waits and we don't want to block the MenusProcessFiber
+                {
+                    try
+                    {
+                        if (Game.LocalPlayer.Character.LastVehicle.IsEngineOn)
+                        {
+                            Rage.Native.NativeFunction.Natives.SET_VEHICLE_ENGINE_ON(Game.LocalPlayer.Character.LastVehicle, false, true);
+                        }
+                        if (!Game.LocalPlayer.Character.LastVehicle.IsEngineOn)
+                        {
+                            Rage.Native.NativeFunction.Natives.SET_VEHICLE_ENGINE_ON(Game.LocalPlayer.Character.LastVehicle, true, true);
+                        }
+                    }
+                    catch (Rage.Exceptions.InvalidHandleableException)
+                    {
+                        Game.DisplaySubtitle("Closest vehicle has no boot!", 2500);
+                    }
+                });
+            }
+
         }
 
         public static void BootOnItemSelect(UIMenu sender, UIMenuItem SelectedItem, int index)
@@ -114,13 +140,13 @@ namespace MenuExample
                 {
                     try
                     {
-                        if (Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[5].IsOpen)
+                        if (Game.LocalPlayer.Character.LastVehicle.Doors[5].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[5].Close(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[5].Close(false);
                         }
-                        if (!Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[5].IsOpen)
+                        if (!Game.LocalPlayer.Character.LastVehicle.Doors[5].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[5].Open(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[5].Open(false);
                         }
                     }
                     catch (Rage.Exceptions.InvalidHandleableException)
@@ -135,13 +161,13 @@ namespace MenuExample
                 {
                     try
                     {
-                        if (Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[4].IsOpen)
+                        if (Game.LocalPlayer.Character.LastVehicle.Doors[4].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[4].Close(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[4].Close(false);
                         }
-                        if (!Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[4].IsOpen)
+                        if (!Game.LocalPlayer.Character.LastVehicle.Doors[4].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[4].Open(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[4].Open(false);
                         }
                     }
                     catch (Rage.Exceptions.InvalidHandleableException)
@@ -156,13 +182,13 @@ namespace MenuExample
                 {
                     try
                     {
-                        if (Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[2].IsOpen)
+                        if (Game.LocalPlayer.Character.LastVehicle.Doors[2].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[2].Close(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[2].Close(false);
                         }
-                        if (!Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[2].IsOpen)
+                        if (!Game.LocalPlayer.Character.LastVehicle.Doors[2].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[2].Open(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[2].Open(false);
                         }
                     }
                     catch (Rage.Exceptions.InvalidHandleableException)
@@ -177,13 +203,13 @@ namespace MenuExample
                 {
                     try
                     {
-                        if (Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[3].IsOpen)
+                        if (Game.LocalPlayer.Character.LastVehicle.Doors[3].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[3].Close(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[3].Close(false);
                         }
-                        if (!Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[3].IsOpen)
+                        if (!Game.LocalPlayer.Character.LastVehicle.Doors[3].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[3].Open(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[3].Open(false);
                         }
                     }
                     catch (Rage.Exceptions.InvalidHandleableException)
@@ -198,13 +224,13 @@ namespace MenuExample
                 {
                     try
                     {
-                        if (Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[1].IsOpen)
+                        if (Game.LocalPlayer.Character.LastVehicle.Doors[1].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[1].Close(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[1].Close(false);
                         }
-                        if (!Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[1].IsOpen)
+                        if (!Game.LocalPlayer.Character.LastVehicle.Doors[1].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[1].Open(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[1].Open(false);
                         }
                     }
                     catch (Rage.Exceptions.InvalidHandleableException)
@@ -219,13 +245,13 @@ namespace MenuExample
                 {
                     try
                     {
-                        if (Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[0].IsOpen)
+                        if (Game.LocalPlayer.Character.LastVehicle.Doors[0].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[0].Close(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[0].Close(false);
                         }
-                        if (!Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[0].IsOpen)
+                        if (!Game.LocalPlayer.Character.LastVehicle.Doors[0].IsOpen)
                         {
-                            Game.LocalPlayer.Character.GetNearbyVehicles(1)[0].Doors[0].Open(false);
+                            Game.LocalPlayer.Character.LastVehicle.Doors[0].Open(false);
                         }
                     }
                     catch (Rage.Exceptions.InvalidHandleableException)
